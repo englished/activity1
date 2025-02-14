@@ -1,1 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parents, Peers and Adolescents</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0e6d2, #d4b996);
+            background-size: cover;
+            background-attachment: fixed;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .instructions {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .column {
+            width: 22%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Χρώματα για κάθε ομάδα */
+        #teamA {
+            background-color: rgba(255, 182, 193, 0.8); /* Ανοιχτό ροζ */
+        }
+        #teamB {
+            background-color: rgba(173, 216, 230, 0.8); /* Ανοιχτό μπλε */
+        }
+        #teamC {
+            background-color: rgba(144, 238, 144, 0.8); /* Ανοιχτό πράσινο */
+        }
+        #teamD {
+            background-color: rgba(255, 215, 0, 0.8); /* Ανοιχτό κίτρινο */
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        #winnerMessage {
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+            margin-top: 20px;
+            display: none;
+        }
+        .feedback {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .emoji {
+            font-size: 24px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Parents, Peers and Adolescents 👨‍👩‍👧‍👦👫</h1>
+    <p class="instructions">Once your teacher gives the signal, begin! The team that answers all 10 questions correctly first and reaches the end of the board will be the winner. 🎉</p>
+    
+    <div class="container">
+        <div class="column" id="teamA">
+            <h3>Group 1: General Peer Influence</h3>
+            <div id="questionsA"></div>
+        </div>
+        <div class="column" id="teamB">
+            <h3>Group 2: Parent-Adolescent Relationships</h3>
+            <div id="questionsB"></div>
+        </div>
+        <div class="column" id="teamC">
+            <h3>Group 3: Adolescent Development and Independence</h3>
+            <div id="questionsC"></div>
+        </div>
+        <div class="column" id="teamD">
+            <h3>Group 4: Parental Support Strategies</h3>
+            <div id="questionsD"></div>
+        </div>
+    </div>
 
+    <p id="winnerMessage">CONGRATULATIONS! The team has won! 🎉🏆</p>
+
+    <!-- Sounds -->
+    <audio id="failSound">
+        <source src="fail-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="successSound">
+        <source src="success-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const questions = {
+            A: [
+                "Do peers play a major role in a young person’s life as they enter adolescence?",
+                "Can peers sometimes encourage problem behaviors in teenagers?",
+                "Do peers typically replace family as the center of a young person's social life?",
+                "Is it common for teenagers to feel closer to friends than parents during high school?",
+                "Can economic pressures and family strains make teenagers rely more on their friends?",
+                "Do peers always have a negative impact on adolescent development?",
+                "Should teenagers always follow their peers' advice instead of their parents'?",
+                "Can peer relationships help reinforce family values?",
+                "Do teenagers turn to their peers for advice because they understand and sympathize?",
+                "Are peer relationships completely separate from family influence?"
+            ],
+            B: [
+                "Do parents and adolescents generally become more distant from each other during adolescence?",
+                "Can stress caused by work and marital dissatisfaction affect parent-adolescent relationships?",
+                "Does an increase in family stress make adolescents more emotionally dependent on their friends?",
+                "Should parents completely control their teenagers' decisions without their input?",
+                "Can involving teenagers in decision-making improve parent-adolescent relationships?",
+                "Do all parent-adolescent conflicts indicate a broken relationship?",
+                "Should parents ignore their teenagers’ need for independence?",
+                "Can emotional coldness in families increase the risk of psychological and behavioral problems in adolescents?",
+                "Are conflicts between parents and teenagers always negative?",
+                "Do some families experience severe distress, leading to frequent anger and withdrawal?"
+            ],
+            C: [
+                "Do adolescents need many skills to successfully gain independence?",
+                "Can some teenagers struggle with the transition to adolescence?",
+                "Is experiencing some stress during adolescence considered normal?",
+                "Should parents be alarmed by every challenge their teenager faces?",
+                "Can parents help make adolescence easier by preparing their child early?",
+                "Should parents completely prevent their children from making independent choices?",
+                "Is providing a safe and loving home environment important for adolescent development?",
+                "Can teenagers learn responsibility by taking care of their own belongings?",
+                "Should parents encourage open conversations with their teenagers?",
+                "Do teenagers need to learn to accept limits and responsibilities?"
+            ],
+            D: [
+                "Can a loving home environment help a child transition smoothly into adolescence?",
+                "Should parents create an atmosphere of honesty, trust, and respect?",
+                "Does allowing age-appropriate independence help teenagers develop positively?",
+                "Should parents completely control their teenager's actions to prevent mistakes?",
+                "Can encouraging teenagers to express their feelings strengthen family relationships?",
+                "Is teaching responsibility an important part of adolescent development?",
+                "Should parents assign household chores to teach responsibility?",
+                "Do teenagers need to learn about limits and consequences?",
+                "Can early parental involvement make adolescence less stressful?",
+                "Should parents ignore their teenager’s need for independence?"
+            ]
+        };
+
+        const correctAnswers = {
+            A: [true, true, true, true, true, false, false, true, true, false],
+            B: [true, true, true, false, true, false, false, true, false, true],
+            C: [true, true, true, false, true, false, true, true, true, true],
+            D: [true, true, true, false, true, true, true, true, true, false]
+        };
+
+        function showQuestion(team, index) {
+            const questionElement = document.getElementById(`question${team}${index}`);
+            const buttons = document.querySelectorAll(`#questions${team} div:nth-child(${index + 1}) button`);
+            questionElement.classList.remove("hidden");
+            buttons.forEach(btn => btn.classList.remove("hidden"));
+        }
+
+        function checkAnswer(team, index, selectedAnswer) {
+            const feedbackElement = document.createElement("p");
+            feedbackElement.classList.add("feedback");
+
+            if (correctAnswers[team][index] === selectedAnswer) {
+                feedbackElement.textContent = "Correct! 🎉";
+                feedbackElement.classList.add("correct");
+                document.querySelectorAll(`#questions${team} div:nth-child(${index + 1}) button`).forEach(btn => btn.disabled = true);
+                if (index === 9) { 
+                    document.getElementById("winnerMessage").style.display = "block";
+                    const successSound = document.getElementById("successSound");
+                    successSound.play(); // Play success sound
+                    disableAllTeams();
+                }
+            } else {
+                feedbackElement.textContent = "Try again! 😅";
+                feedbackElement.classList.add("incorrect");
+                const failSound = document.getElementById("failSound");
+                failSound.play(); // Play fail sound
+            }
+
+            const questionDiv = document.querySelector(`#questions${team} div:nth-child(${index + 1})`);
+            questionDiv.appendChild(feedbackElement);
+        }
+
+        function disableAllTeams() {
+            document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+        }
+
+        function generateQuestions(team) {
+            let container = document.getElementById(`questions${team}`);
+            questions[team].forEach((question, index) => {
+                let div = document.createElement("div");
+                div.innerHTML = `
+                    <button onclick="showQuestion('${team}', ${index})">Show Question ${index + 1}</button>
+                    <p id="question${team}${index}" class="hidden">${question}</p>
+                    <button class="hidden" onclick="checkAnswer('${team}', ${index}, true)">Yes</button>
+                    <button class="hidden" onclick="checkAnswer('${team}', ${index}, false)">No</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        generateQuestions("A");
+        generateQuestions("B");
+        generateQuestions("C");
+        generateQuestions("D");
+    </script>
+</body>
+</html>
